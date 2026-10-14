@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    <link rel="stylesheet" href="./style.css">
+
+  </head>
+    
+  <body>
+  <div class="app">
+  <header class="topbar">
+    <a class="logo" href="#" onclick="showHome(); return false;">sayfa<span>.</span></a>
+    
+<div class="header-actions">
+  <button id="homeTab" class="nav-btn" type="button">Ana sayfa</button>
+  <button id="savedTab" class="nav-btn" type="button">♡ Kitaplığım</button>
+  <button id="journalTab" class="nav-btn" type="button">Okuma günlüğüm</button>
+  <button id="profileTab" class="nav-btn" type="button">Profilim</button>
+  <button id="settingsTab" class="nav-btn" type="button">Ayarlar</button>
+  <button id="themeToggle" class="icon-btn" type="button" aria-label="Tema değiştir">☾</button>
+</div>
+
+  </header>
+
+  <main id="homeScreen">
+    <section class="hero">
+      <p class="eyebrow">KENDİ KÜÇÜK DÜNYAN</p>
+      <h1>Her kitapta<br><span>yeni bir sayfa.</span></h1>
+      <p class="hero-text">Kitaplarını keşfet, kendi kitaplığını oluştur ve kaldığın yerden devam et.</p>
+
+      <div class="search-wrap">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Kitap veya yazar ara..." />
+      </div>
+    </section>
+
+    <section id="continueSection" class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">KALDIĞIN YERDEN</p>
+          <h2>Okumaya devam et</h2>
+        </div>
+      </div>
+      <div id="continueBooks" class="book-grid"></div>
+      <p id="continueEmpty" class="empty-note">Henüz okumaya başladığın bir kitap yok. Bir kitap seç ve ilk sayfanı aç.</p>
+    </section>
+
+    <section id="addSection" class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SENİN KİTAPLIĞIN</p>
+          <h2>Yeni kitap ekle</h2>
+        </div>
+      </div>
+
+      <form id="addBookForm" class="add-form">
+        <div class="form-row">
+          <label>
+            Kitap adı *
+            <input id="bookTitle" name="title" required maxlength="120" placeholder="Örn. Küçük Prens" />
+          </label>
+          <label>
+            Yazar *
+            <input id="bookAuthor" name="author" required maxlength="100" placeholder="Yazarın adı" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Tür
+            <select id="bookCategory" name="category">
+              <option value="Roman">Roman</option>
+              <option value="Klasik">Klasik</option>
+              <option value="Kişisel gelişim">Kişisel gelişim</option>
+              <option value="Felsefe">Felsefe</option>
+              <option value="Fantastik">Fantastik</option>
+              <option value="Öykü">Öykü</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+          </label>
+          <label>
+            Kapak görseli bağlantısı (isteğe bağlı)
+            <input id="bookCover" name="cover" type="url" placeholder="https://..." />
+          </label>
+        </div>
+
+        <label class="file-label">
+          Kitap dosyası (PDF veya EPUB)
+          <input id="bookFile" name="file" type="file" accept=".pdf,.epub,application/pdf,application/epub+zip" />
+          <span class="file-help">Dosya eklemezsen kitabı örnek okuma ekranıyla kullanabilirsin.</span>
+        </label>
+
+        <button class="primary-btn" type="submit">＋ Kitabımı ekle</button>
+        <p id="formMessage" class="form-message" role="status"></p>
+      </form>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" id="catalogEyebrow">KEŞFET</p>
+          <h2 id="catalogTitle">Kitaplığını keşfet</h2>
+        </div>
+        <span id="bookCount" class="count-label">0 kitap</span>
+      </div>
+      <div id="categories" class="category-list"></div>
+      <div id="bookGrid" class="book-grid"></div>
+      <p id="noResults" class="empty-note hidden">Bu aramaya uygun kitap bulamadım.</p>
+    </section>
+  </main>
+
+  <section id="readerScreen" class="reader-screen hidden">
+    <div class="reader-top">
+      <button id="backHome" class="text-btn" type="button">← Kitaplığa dön</button>
+      <button id="readerFavorite" class="icon-btn" type="button" aria-label="Favorilere ekle">♡</button>
+    </div>
+
+    <div class="reader-heading">
+      <p id="readerAuthor" class="eyebrow"></p>
+      <h1 id="readerTitle">Kitap adı</h1>
+      <p id="readerStatus" class="reader-status">Okumaya hazırsın.</p>
+    </div>
+
+    <div id="sampleReader" class="sample-reader">
+      <p class="eyebrow">OKUMA ALANI</p>
+      <p id="sampleText">Kendi hikâyenin ilk sayfasına hoş geldin.</p>
+    </div>
+
+    <div id="pdfReader" class="pdf-reader hidden">
+      <div class="pdf-toolbar">
+        <button id="pdfPrev" class="reader-control" type="button">← Önceki</button>
+        <span>Sayfa <strong id="pdfPageNumber">1</strong> / <strong id="pdfPageTotal">1</strong></span>
+        <button id="pdfNext" class="reader-control" type="button">Sonraki →</button>
+      </div>
+      <div id="pdfCanvasWrap" class="pdf-canvas-wrap">
+        <canvas id="pdfCanvas"></canvas>
+      </div>
+    </div>
+
+    <div id="epubReader" class="epub-reader hidden">
+      <div id="epubViewer"></div>
+      <div class="epub-controls">
+        <button id="epubPrev" class="reader-control" type="button">← Önceki</button>
+        <button id="epubNext" class="reader-control" type="button">Sonraki →</button>
+      </div>
+    </div>
+
+    <div id="sampleControls" class="sample-controls">
+      <button id="samplePrev" class="reader-control" type="button">← Önceki sayfa</button>
+      <span id="samplePageLabel">Sayfa 1</span>
+      <button id="sampleNext" class="reader-control" type="button">Sonraki sayfa →</button>
+    </div>
+
+    <p class="reader-footnote">Okuma ilerlemen bu tarayıcıda otomatik kaydedilir.</p>
+  </section>
+
+  <footer class="footer">
+    <a class="logo" href="#" onclick="showHome(); return false;">sayfa<span>.</span></a>
+    <p>Kendine ayırdığın her sayfa değerlidir.</p>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/epubjs/dist/epub.min.js"></script>
+    <script  src="./script.js"></script>
+
+  </body>
+  
+</html>
